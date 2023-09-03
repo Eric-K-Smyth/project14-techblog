@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fund My Project!</title>
+  <link rel="stylesheet" href="/css/jass.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="flex-column justify-space-around">
+    <header class="display-flex justify-space-between align-center p-2">
+      <h1>
+        <span role="img" aria-label="money">💸</span>
+        <a href="/">Fund My Project!</a>
+      </h1>
+      <nav>
+        <!-- Conditionally render login or logout links -->
+        {{#if logged_in}}
+        <a href="/profile">profile</a> |
+        <button class="no-button" id="logout">logout</button>
+        {{else}}
+        <a href="/login">login</a>
+        {{/if}}
+      </nav>
+    </header>
+    <main class="container container-fluid mt-5">
+      <!-- Page-specific content goes here -->
+      {{#if logged_in}}
+        <section class="create-post">
+          <h2>Create a New Blog Post</h2>
+          <form id="new-post-form">
+            <div class="form-group">
+              <label for="post-title">Title:</label>
+              <input type="text" id="post-title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label for="post-content">Content:</label>
+              <textarea id="post-content" name="content" required></textarea>
+            </div>
+            <button type="submit">Create Post</button>
+          </form>
+        </section>
+      {{else}}
+        <p>Please log in to create blog posts.</p>
+      {{/if}}
+    </main>
+    <footer>
+      <!-- Footer content here -->
+    </footer>
+  </div>
+
+  <!-- Render script for logged in users only -->
+  {{#if logged_in}}
+  <script src="/js/new-post.js"></script>
+  {{/if}}
+</body>
+</html>

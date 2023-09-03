@@ -1,0 +1,14 @@
+[
+    {
+      "body": "This is a comment about the first post.",
+      "userId": 1,
+      "postId": 1
+    },
+    {
+      "body": "I agree with the author's points.",
+      "userId": 2,
+      "postId": 1
+    }
+    
+  ]
+  

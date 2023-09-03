@@ -1,25 +1,19 @@
-const sequelize = require('../config/connection');
-const { User, Project } = require('../models');
-
-const userData = require('./userData.json');
-const projectData = require('./projectData.json');
+// seed.js
+const { User, Post, Comment } = require('../models');
+const userData = require('./userdata.json');
+const commentData = require('./commentdata.json'); // Use the new comment data JSON file
 
 const seedDatabase = async () => {
-  await sequelize.sync({ force: true });
-
-  const users = await User.bulkCreate(userData, {
+  await User.bulkCreate(userData, {
     individualHooks: true,
     returning: true,
   });
 
-  for (const project of projectData) {
-    await Project.create({
-      ...project,
-      user_id: users[Math.floor(Math.random() * users.length)].id,
-    });
-  }
+  // Assuming you still have a projectData JSON file for blog posts
+  const projectData = require('./projectdata.json');
+  await Post.bulkCreate(projectData);
 
-  process.exit(0);
+  await Comment.bulkCreate(commentData);
 };
 
 seedDatabase();
