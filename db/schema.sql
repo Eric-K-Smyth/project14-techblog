@@ -1,6 +1,8 @@
 DROP DATABASE IF EXISTS techblog_db;
 CREATE DATABASE techblog_db;
 
+USE techblog_db;
+
 -- Create the Users table
 CREATE TABLE Users (
   id INT AUTO_INCREMENT PRIMARY KEY,       -- Unique identifier for users
@@ -10,11 +12,13 @@ CREATE TABLE Users (
 
 -- Create the Posts table
 CREATE TABLE Posts (
-  id INT AUTO_INCREMENT PRIMARY KEY,       -- Unique identifier for posts
-  title VARCHAR(255),                      -- Title of the blog post
-  body TEXT,                               -- Content of the blog post
-  userId INT,                             -- Foreign key to associate with the user who created the post
-  FOREIGN KEY (userId) REFERENCES Users(id) -- Establishes a relationship between Posts and Users
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255),
+  body TEXT,
+  userId INT,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES Users(id)
 );
 
 -- Create the Comments table

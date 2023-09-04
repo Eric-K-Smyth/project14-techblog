@@ -14,7 +14,6 @@
         <h1>Your Profile</h1>
         {{#if logged_in}}
         <h2>Hello, {{user.username}}!</h2>
-        <p>Email: {{user.email}}</p>
         <h3>Your Blog Posts</h3>
         <ul>
             {{#each user.posts}}
