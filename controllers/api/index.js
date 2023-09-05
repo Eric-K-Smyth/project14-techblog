@@ -4,7 +4,7 @@ const postRoutes = require('./postRoutes');
 const commentRoutes = require('./commentRoutes');
 
 // Prefix all API routes with '/users'
-router.use('/users', userRoutes);
+router.use('/user', userRoutes);
 
 // Prefix all API routes with '/posts'
 router.use('/posts', postRoutes);

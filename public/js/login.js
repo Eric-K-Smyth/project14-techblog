@@ -10,13 +10,20 @@ const loginFormHandler = async (event) => {
 
   if (username && password) {
     // Send a POST request to the API endpoint for login
-    const response = await fetch('/api/users/login', {
+    const response = await fetch('/api/user/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
       headers: { 'Content-Type': 'application/json' },
     });
 
     if (response.ok) {
+        // If successful, retrieve user information from the response
+        const { user } = await response.json();
+
+        // Store user information in session storage
+        sessionStorage.setItem('userId', user.id);
+        sessionStorage.setItem('username', user.username);
+      
       // If successful, redirect the browser to the profile page
       document.location.replace('/');
     } else {
@@ -37,7 +44,7 @@ const signupFormHandler = async (event) => {
     const password = passwordInput.value.trim();
 
     if (name && password) {
-      const response = await fetch('/api/users', {
+      const response = await fetch('/api/user', {
         method: 'POST',
         body: JSON.stringify({ username: name, password }),
         headers: { 'Content-Type': 'application/json' },

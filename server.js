@@ -9,6 +9,7 @@ const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const { User } = require('./models'); // Import the User model
+const { Post } = require('./models'); // Import the Post model
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -52,6 +53,17 @@ app.get('/signup', (req, res) => {
   res.render('signup'); 
 });
 
+// Define a route for the "/new-post" page
+app.get('/new-post', (req, res) => {
+  // Render the "new-post.handlebars" view
+  res.render('new-post');
+});
+
+app.get('/post/:id', (req, res) => {
+  // Your code to fetch and render an individual post
+  res.render('single-post');
+});
+
 // Handle POST request to process user sign-up
 app.post('/signup', async (req, res) => {
   try {
@@ -71,6 +83,25 @@ app.post('/signup', async (req, res) => {
       req.session.logged_in = true;
       res.redirect('/login'); // Redirect to login page
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
+// In your route handler:
+app.get('/', async (req, res) => {
+  try {
+    // Fetch recent blog posts including the username of the author
+    const postData = await Post.findAll({
+      include: [{ model: User, attributes: ['username'] }],
+    });
+
+    // Serialize the data
+    const posts = postData.map((post) => post.get({ plain: true }));
+
+    // Render the homepage template and pass the data
+    res.render('homepage', { posts, logged_in: req.session.logged_in });
   } catch (err) {
     console.error(err);
     res.status(500).json(err);

@@ -5,16 +5,22 @@ class Post extends Model {}
 
 Post.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     title: DataTypes.STRING,
     body: DataTypes.STRING,
-    createdAt: DataTypes.DATE, // Include createdAt field
-    updatedAt: DataTypes.DATE, // Include updatedAt field
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
-    timestamps: true, // Enable timestamps (createdAt and updatedAt)
-    modelName: 'Post', // Set the model name to 'Post'
-    tableName: 'Posts', // Set the table name to 'Posts'
+    timestamps: true,
+    modelName: 'Post',
+    tableName: 'Posts',
   }
 );
 
