@@ -23,10 +23,12 @@ CREATE TABLE Posts (
 
 -- Create the Comments table
 CREATE TABLE Comments (
-  id INT AUTO_INCREMENT PRIMARY KEY,       -- Unique identifier for comments
-  body TEXT,                               -- Content of the comment
-  userId INT,                             -- Foreign key to associate with the user who created the comment
-  postId INT,                              -- Foreign key to associate with the post the comment belongs to
-  FOREIGN KEY (userId) REFERENCES User(id),  -- Establishes a relationship between Comments and Users
-  FOREIGN KEY (postId) REFERENCES Posts(id)  -- Establishes a relationship between Comments and Posts
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  body TEXT,
+  userId INT,
+  postId INT,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES User(id),
+  FOREIGN KEY (postId) REFERENCES Posts(id)
 );

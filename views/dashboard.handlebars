@@ -8,27 +8,31 @@
 </head>
 <body>
     <header>
-        <!-- Header content here -->
+        <h1>Your Dashboard</h1>
     </header>
     <main>
-        <h1>Your Dashboard</h1>
         {{#if logged_in}}
         <h2>Your Blog Posts</h2>
         <ul>
-            {{#each user.posts}}
-            <li>
-                <a href="/post/{{id}}">{{title}}</a>
-            </li>
-            {{/each}}
+            <!-- Loop through posts and display delete and update buttons for each post -->
+        {{#each posts}}
+        <div class="post-item">
+            <h6>{{title}}</h6>
+            <p>{{body}}</p>
+            <p>Posted by: You!</p>
+            <p>Date: {{createdAt}}</p>
+            <a href="dashboard/update/{{id}}">Update</a> <!-- Link to update post page -->
+             <button class="delete-btn" data-post-id="{{id}}">Delete</button> <!-- Delete button -->
+        </div>
+        {{/each}}
         </ul>
-        <a href="/new-post">Make A New Post</a> |
+            <a href="/new-post">Make A New Post</a> 
         {{else}}
-        <p>Please <a href="/login">login</a> to access your dashboard.</p>
+            <p>Please <a href="/login">login</a> to access your dashboard.</p>
         {{/if}}
     </main>
-    <footer>
-        
+    <footer>   
     </footer>
-    
+    <script src="/js/dashboard.js"></script>
 </body>
 </html>

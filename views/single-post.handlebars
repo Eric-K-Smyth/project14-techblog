@@ -10,26 +10,47 @@
 <body>
   <div class="flex-column justify-space-around">
     <header class="display-flex justify-space-between align-center p-2">
-      <h1>
-        <a href="/">Tech Blog</a>
-      </h1>
-      <nav>
-        <!-- Conditionally render login or logout links -->
-        {{#if logged_in}}
-        <a href="/profile">profile</a> |
-        <button class="no-button" id="logout">logout</button>
-        {{else}}
-        <a href="/login">login</a>
-        {{/if}}
-      </nav>
+    <h3>{{title}}</h3>
     </header>
     <main class="container container-fluid mt-5">
       <!-- Page-specific content goes here -->
       <section class="single-post">
-        <h2>{{title}}</h2>
         <p>{{body}}</p>
         <p>Posted by: {{username}}</p>
-        <p>Date: {{format_date createdAt}}</p>
+        <p>Date: {{createdAt}}</p>
+      </section>
+    <!-- Display Existing Comments -->
+     
+      <section class="comments">
+        <h5>Comments</h5>
+        {{#if comments.length}}
+          <ul>
+            {{#each comments}}
+            <li>
+            <p>{{this.body}}</p>
+            <p>Comment by: {{this.User.username}}</p>
+            <p>Date: {{createdAt}}</p>
+           </li>
+            {{/each}}
+          </ul>
+        {{else}}
+        <ul>
+          <p>No comments yet.</p>
+        </ul>
+        
+          {{/if}}
+        </section>
+      
+      <!-- Comment Form -->
+      <section class="comment-form">
+      <h3>Leave a Comment</h3>
+      <form id="comment-form" method="POST">
+          <div class="form-group">
+            <label for="commentBody">Leave a comment:</label>
+            <textarea class="form-control" id="commentBody" name="body" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
       </section>
     </main>
     <footer>
@@ -37,9 +58,10 @@
     </footer>
   </div>
 
-  <!-- Render script for logged in users only -->
+  <!-- Render script for logged-in users only -->
   {{#if logged_in}}
-  <script src="/js/newpost.js"></script>
+  <script src="/js/singlepost.js"></script>
   {{/if}}
 </body>
 </html>
+

@@ -41,6 +41,83 @@ router.get('/dashboard', withAuth, async (req, res) => {
   }
 });
 
+// Delete Post Route
+router.get('/dashboard/delete/:id', withAuth, async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    // Find the post by its ID
+    const post = await Post.findByPk(postId);
+
+    // Check if the post exists and belongs to the logged-in user
+    if (!post || post.userId !== req.session.user_id) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Delete the post
+    await Post.destroy({
+      where: { id: postId },
+    });
+
+    // Redirect back to the dashboard
+    res.redirect('/dashboard');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
+// Update Post Route (GET)
+router.get('dashboard/update/:id', withAuth, async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    // Find the post by its ID
+    const post = await Post.findByPk(postId);
+
+    // Check if the post exists and belongs to the logged-in user
+    if (!post || post.userId !== req.session.user_id) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Render the update form with the post data
+    res.render('edit-post', { post, logged_in: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
+// Update Post Route (POST)
+router.post('/dashboard/update/:id', withAuth, async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { title, content } = req.body;
+
+    // Find the post by its ID
+    const post = await Post.findByPk(postId);
+
+    // Check if the post exists and belongs to the logged-in user
+    if (!post || post.userId !== req.session.user_id) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Update the post
+    await Post.update(
+      { title, content },
+      {
+        where: { id: postId },
+      }
+    );
+
+    // Redirect back to the dashboard
+    res.redirect('/dashboard');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
 // User Profile Route
 router.get('/profile', withAuth, async (req, res) => {
   try {

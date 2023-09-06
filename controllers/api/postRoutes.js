@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Post, User } = require('../../models');
+const { Post, User, Comment } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 // Create a New Blog Post Route
@@ -13,6 +13,8 @@ router.post('/', withAuth, async (req, res) => {
       body: req.body.body,
       userId: req.session.user_id,
     });
+
+    console.log('Created post:', newPost); // Add this line for debugging
 
     res.json(newPost);
   } catch (err) {
@@ -34,6 +36,8 @@ router.put('/:id', withAuth, async (req, res) => {
       }
     );
 
+    console.log('Updated post:', updatedPost); // Add this line for debugging
+
     res.json(updatedPost);
   } catch (err) {
     console.error(err);
@@ -48,6 +52,8 @@ router.delete('/:id', withAuth, async (req, res) => {
       where: { id: req.params.id },
     });
 
+    console.log('Deleted post:', deletedPost); // Add this line for debugging
+
     res.json(deletedPost);
   } catch (err) {
     console.error(err);
@@ -56,30 +62,42 @@ router.delete('/:id', withAuth, async (req, res) => {
 });
 
 // Define a route to display an individual post
-router.get('/posts/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     // Fetch the post by its ID, including the associated user
     const post = await Post.findByPk(req.params.id, {
-      include: User, // Include the associated user
+      include: [
+        { model: User, attributes: ['username'] },
+        {
+          model: Comment, // Include comments
+          include: User, // Include the associated user for each comment
+          attributes: ['id', 'body', 'createdAt'],
+        },
+      ],
       attributes: ['id', 'title', 'body', 'createdAt'],
+      
+    
     });
 
     if (!post) {
       // If the post doesn't exist, return a 404 error
+      console.log('Post not found.'); // Add this line for debugging
       return res.status(404).render('404');
     }
 
+    console.log('Retrieved post:', post); // Add this line for debugging
+
     // Render the individual post page template and pass the post data
-    console.log('Post:', post);
     res.render('single-post', {
-      id: req.params.id,
+      id: post.id,
       title: post.title,
       body: post.body,
       username: post.User.username, // Access the username from the associated User model
       createdAt: post.createdAt ? new Date(post.createdAt).toLocaleDateString() : '', // Check for undefined date
       logged_in: req.session.logged_in, // Pass the logged_in status
+      comments: post.Comments, // Pass the comments for the post
+      
     });
- 
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
@@ -87,3 +105,4 @@ router.get('/posts/:id', async (req, res) => {
 });
 
 module.exports = router;
+

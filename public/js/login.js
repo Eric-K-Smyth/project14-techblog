@@ -24,8 +24,8 @@ const loginFormHandler = async (event) => {
         sessionStorage.setItem('userId', user.id);
         sessionStorage.setItem('username', user.username);
       
-      // If successful, redirect the browser to the profile page
-      document.location.replace('/');
+      // If successful, redirect the browser to the dashboard page
+      document.location.replace('/dashboard');
     } else {
       alert(response.statusText);
     }

@@ -22,3 +22,15 @@ header, .project:not(:last-child) {
   font-weight: bold;
   margin-left: -5px;
 }
+
+.post-item {
+  border: 1px solid black; /* Add a black border around each post item */
+  padding: 10px; /* Add some padding to create spacing between the content and the border */
+  margin-bottom: 20px; /* Add margin to create space between each post item */
+}
+
+.posts {
+  border: 1px solid black; /* Add a black border around each post item */
+  padding: 10px; /* Add some padding to create spacing between the content and the border */
+  margin-bottom: 20px; /* Add margin to create space between each post item */
+}

@@ -8,12 +8,11 @@
 </head>
 <body>
     <header>
-        <!-- Header content here -->
+        <h1>Welcome to the Tech Blog</h1>
     </header>
     <main>
-        <h1>Welcome to the Tech Blog</h1>
         {{#if logged_in}}
-        <h2>Recent Blog Posts</h2>
+        <h2>Recent Posts</h2>
         <ul>
             {{#each posts}}
             <li>
@@ -22,7 +21,7 @@
             {{/each}}
         </ul>
         {{else}}
-        <p>Please <a href="/login">login</a> or <a href="/login">signup</a> to see blog posts.</p>
+        <p>Please <a href="/login">Login</a> or <a href="/login">Signup</a> to see blog posts.</p>
         {{/if}}
     </main>
     <footer>

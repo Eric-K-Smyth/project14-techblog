@@ -10,6 +10,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const { User } = require('./models'); // Import the User model
 const { Post } = require('./models'); // Import the Post model
+const { Comment } = require('./models');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -59,10 +60,99 @@ app.get('/new-post', (req, res) => {
   res.render('new-post');
 });
 
-app.get('/post/:id', (req, res) => {
-  // Your code to fetch and render an individual post
-  res.render('single-post');
+app.get('/post/:id', async (req, res) => {
+  try {
+    // Fetch the post by its ID, including the associated user
+    const post = await Post.findByPk(req.params.id, {
+      include: User, // Include the associated user
+      attributes: ['id', 'title', 'body', 'createdAt'],
+    });
+
+    if (!post) {
+      // If the post doesn't exist, return a 404 error or handle it as needed
+      return res.status(404).render('404');
+    }
+
+    // Render the individual post page template and pass the post data
+    res.render('single-post', {
+      id: post.id, // Pass the post ID here
+      title: post.title,
+      body: post.body,
+      username: post.User.username, // Access the username from the associated User model
+      createdAt: post.createdAt ? new Date(post.createdAt).toLocaleDateString() : '', // Check for undefined date
+      logged_in: req.session.logged_in, // Pass the logged_in status
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
 });
+// Define a route for fetching comments for a specific post
+app.get('/comment/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    // Fetch comments for the specified post
+    const comments = await Comment.findAll({
+      where: { postId },
+      include: User, // Include the associated user for each comment
+      attributes: ['id', 'body', 'createdAt'],
+    });
+
+    res.json(comments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+app.get('/dashboard', async (req, res) => {
+  try {
+    // Check if the user is logged in
+    if (!req.session.logged_in) {
+      return res.redirect('/login'); // Redirect to login page if not logged in
+    }
+
+    // Fetch the user's posts
+    const userPosts = await Post.findAll({
+      where: {
+        userId: req.session.user_id, // Filter by user ID
+      },
+    });
+
+    // Serialize the data
+    const posts = userPosts.map((post) => post.get({ plain: true }));
+
+    // Render the dashboard template and pass the user's posts
+    res.render('dashboard', { posts, logged_in: req.session.logged_in });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
+app.post('/comment/:id', async (req, res) => {
+  try {
+    // Extract the post ID from the URL
+    const postId = req.params.id;
+
+    // Extract the comment body from the request body
+    const { body } = req.body;
+
+    // Create a new comment associated with the post and user
+    const newComment = await Comment.create({
+      body,
+      userId: req.session.user_id, // Assuming you have user authentication
+      postId: postId,
+    });
+
+    // Instead of redirecting, you can send a response indicating success
+    res.status(201).json({ message: 'Comment added successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
 
 // Handle POST request to process user sign-up
 app.post('/signup', async (req, res) => {
@@ -88,6 +178,55 @@ app.post('/signup', async (req, res) => {
     res.status(500).json(err);
   }
 });
+// Define a route for displaying the update form
+app.get('/dashboard/update/:id', async (req, res) => {
+  try {
+    // Fetch the post by its ID
+    const post = await Post.findByPk(req.params.id);
+
+    // Check if the post exists and belongs to the logged-in user
+    if (!post || post.userId !== req.session.user_id) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Render the update form with the post data
+    res.render('edit-posts', { post, logged_in: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
+// Define a route for handling the update form submission
+app.post('/dashboard/update/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { title, content } = req.body;
+
+    // Find the post by its ID
+    const post = await Post.findByPk(postId);
+
+    // Check if the post exists and belongs to the logged-in user
+    if (!post || post.userId !== req.session.user_id) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Update the post
+    await Post.update(
+      { title, content },
+      {
+        where: { id: postId },
+      }
+    );
+
+    // Redirect back to the dashboard
+    res.redirect('/dashboard');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
 
 // In your route handler:
 app.get('/', async (req, res) => {

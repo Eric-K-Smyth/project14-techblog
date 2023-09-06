@@ -8,10 +8,23 @@ Comment.init(
     body: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    createdAt: {
+      type: DataTypes.DATE, // Include createdAt field
+      allowNull: false,
+      defaultValue: DataTypes.NOW, // Set a default value for createdAt
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
-    sequelize
+    sequelize,
+    timestamps: true, // Enable timestamps
+    modelName: 'comment',
+    
   }
 );
 
