@@ -14,7 +14,7 @@ router.post('/', withAuth, async (req, res) => {
       userId: req.session.user_id,
     });
 
-    console.log('Created post:', newPost); // Add this line for debugging
+    console.log('Created post:', newPost); // debugging
 
     res.json(newPost);
   } catch (err) {
@@ -36,7 +36,7 @@ router.put('/:id', withAuth, async (req, res) => {
       }
     );
 
-    console.log('Updated post:', updatedPost); // Add this line for debugging
+    console.log('Updated post:', updatedPost); // debugging
 
     res.json(updatedPost);
   } catch (err) {
@@ -52,7 +52,7 @@ router.delete('/:id', withAuth, async (req, res) => {
       where: { id: req.params.id },
     });
 
-    console.log('Deleted post:', deletedPost); // Add this line for debugging
+    console.log('Deleted post:', deletedPost); // debugging
 
     res.json(deletedPost);
   } catch (err) {
@@ -81,11 +81,11 @@ router.get('/:id', async (req, res) => {
 
     if (!post) {
       // If the post doesn't exist, return a 404 error
-      console.log('Post not found.'); // Add this line for debugging
+      console.log('Post not found.'); // debugging
       return res.status(404).render('404');
     }
 
-    console.log('Retrieved post:', post); // Add this line for debugging
+    console.log('Retrieved post:', post); // debugging
 
     // Render the individual post page template and pass the post data
     res.render('single-post', {

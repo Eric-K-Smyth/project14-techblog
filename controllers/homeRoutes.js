@@ -118,25 +118,5 @@ router.post('/dashboard/update/:id', withAuth, async (req, res) => {
   }
 });
 
-// User Profile Route
-router.get('/profile', withAuth, async (req, res) => {
-  try {
-    // Fetch the logged-in user's data and associated blog posts
-    const userData = await User.findByPk(req.session.user_id, {
-      attributes: { exclude: ['password'] },
-      include: [{ model: Post }],
-    });
-
-    // Serialize the data
-    const user = userData.get({ plain: true });
-
-    // Render the user's profile with their data
-    res.render('profile', { user, logged_in: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
-  }
-});
-
 module.exports = router;
 

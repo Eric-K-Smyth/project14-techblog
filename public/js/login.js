@@ -5,8 +5,8 @@ const loginFormHandler = async (event) => {
   const username = document.querySelector('#username-login').value.trim();
   const password = document.querySelector('#password-login').value.trim();
 
-  console.log('Username:', username); // Add this line for debugging
-  console.log('Password:', password); // Add this line for debugging
+  console.log('Username:', username); // debugging
+  console.log('Password:', password); // debugging
 
   if (username && password) {
     // Send a POST request to the API endpoint for login
