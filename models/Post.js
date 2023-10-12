@@ -12,7 +12,7 @@ Post.init(
       autoIncrement: true,
     },
     title: DataTypes.STRING,
-    body: DataTypes.STRING,
+    body: DataTypes.TEXT,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },

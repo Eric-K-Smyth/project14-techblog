@@ -21,8 +21,15 @@
             <p>{{body}}</p>
             <p>Posted by: You!</p>
             <p>Date: {{createdAt}}</p>
-            <a href="dashboard/update/{{id}}">Update</a> <!-- Link to update post page -->
+              <button class="edit-btn">Edit Title</button> <!-- Add an Edit button -->
              <button class="delete-btn" data-post-id="{{id}}">Delete</button> <!-- Delete button -->
+        
+          <!-- Edit Form (Initially Hidden) -->
+        <form class="edit-form" action="/dashboard/update/{{id}}" method="POST">
+        <input type="text" name="title" placeholder="Edit Title" value="{{title}}">
+        <button type="submit">Save Changes</button>
+        </form>
+         
         </div>
         {{/each}}
         </ul>

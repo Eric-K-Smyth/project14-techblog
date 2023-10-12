@@ -34,3 +34,11 @@ header, .project:not(:last-child) {
   padding: 10px; /* Add some padding to create spacing between the content and the border */
   margin-bottom: 20px; /* Add margin to create space between each post item */
 }
+
+.edit-form {
+  display: none;
+}
+
+.edit-form.visible {
+  display: block;
+}

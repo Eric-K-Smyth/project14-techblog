@@ -26,13 +26,18 @@ router.post('/', withAuth, async (req, res) => {
 // Update a Blog Post Route
 router.put('/:id', withAuth, async (req, res) => {
   try {
+    const postId = req.params.id;
+    const updatedTitle = req.body.title;
+
+    console.log('Received request to update post with ID:', postId);
+    console.log('Updated Title:', updatedTitle);
+
     const updatedPost = await Post.update(
       {
-        title: req.body.title,
-        body: req.body.body,
+        title: updatedTitle,
       },
       {
-        where: { id: req.params.id },
+        where: { id: postId },
       }
     );
 

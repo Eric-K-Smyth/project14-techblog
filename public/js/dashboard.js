@@ -24,4 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+document.querySelectorAll('.edit-btn').forEach((button) => {
+    button.addEventListener('click', (e) => {
+      const postItem = e.target.closest('.post-item');
+      const editForm = postItem.querySelector('.edit-form');
+  
+      // Toggle visibility of the edit form
+      editForm.classList.toggle('visible');
+  
+      // Log data for debugging
+      const titleValue = editForm.querySelector('input[name="title"]').value;
+      console.log('Title Value:', titleValue);
+    });
+  });
   

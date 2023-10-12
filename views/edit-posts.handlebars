@@ -15,7 +15,7 @@
     <section class="edit-post">
       <form id="edit-post-form" action="/dashboard/update/{{post.id}}" method="POST"> <!-- Specify the update route with the post ID -->
         <input type="text" id="post-title" name="title" placeholder="Post Title" value="{{post.title}}">
-        <textarea id="post-content" name="content" placeholder="Post Content">{{post.content}}</textarea>
+        <textarea id="post-body" name="body" placeholder="Post Content">{{post.body}}</textarea>
         <button type="submit">Save Changes</button>
       </form>
     </section>
